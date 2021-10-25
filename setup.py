@@ -1,16 +1,10 @@
 import setuptools
 
-# with open("README.md", "r", encoding="utf-8") as fh:
-#     long_description = fh.read()
-
 setuptools.setup(
     name='video_separation',
     version='0.1',
-    url='https://github.com/mike-huls/toolbox',
-    project_urls = {
-        "Bug Tracker": "https://github.com/mike-huls/toolbox/issues"
-    },
+    url='https://github.com/talbalelty/Reflection-Removal',
     license='MIT',
-    packages=['toolbox'],
-    install_requires=['requests'],
+    packages=['video_separation'],
+    install_requires=['gc', 'cv2', 'numpy'],
 )
