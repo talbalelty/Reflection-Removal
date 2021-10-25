@@ -6,5 +6,5 @@ setuptools.setup(
     url='https://github.com/talbalelty/Reflection-Removal',
     license='MIT',
     packages=setuptools.find_packages(),
-    install_requires=['cv2', 'numpy'],
+    install_requires=['opencv-python', 'numpy'],
 )
