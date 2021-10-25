@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 
 class VideoSeparation:
-  def __init__(self, path_video, path_transmission_video=None, path_reflection_video=None, window_size=10, min_val=2.5, save_to_path=true):
+  def __init__(self, path_video, path_transmission_video=None, path_reflection_video=None, window_size=10, min_val=2.5, save_to_path=True):
     self.window_size = window_size
     self.min_val = min_val
     self.path_to_video = path_video
