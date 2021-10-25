@@ -3,28 +3,34 @@ import cv2
 import numpy as np
 
 class VideoSeparation:
-  def __init__(self, path_video, path_transmission_video, path_reflection_video, window_size=10, min_val=2.5, save_to_path=true):
+  def __init__(self, path_video, path_transmission_video=None, path_reflection_video=None, window_size=10, min_val=2.5, save_to_path=true):
     self.window_size = window_size
     self.min_val = min_val
     self.path_to_video = path_video
     self.path_to_transmission_video = path_transmission_video
     self.path_to_reflection_video = path_reflection_video
     
-  def separate_video(path_to_video):
+  def get_transmission(self):
+    if self.path_to_transmission_video is not None:
+      return self.__separate_video(self.path_to_transmission_video, self.__extract_transmission_layer)
+    else:
+      return None
+
+  def get_reflection(self):
+    if self.path_to_reflection_video is not None:
+      return self.__separate_video(self.path_to_reflection_video, self.__extract_reflection_layer)
+    else:
+      return None
+    
+  def __separate_video(self, path_to_save, extract_layer):
     # transmission
     gc.collect()
-    cfg = Configuration()
     video = cv2.VideoCapture(self.path_to_video)
-    transmission_video = process_video_separation(video, extract_transmission_layer, self.path_to_transmission_video)
+    separated_video = self.__process_video_separation(video, extract_layer, path_to_save)
+    
+    return separated_video
 
-    # reflection
-    gc.collect()
-    video = cv2.VideoCapture(self.path_to_video)
-    reflection_video = process_video_separation(video, extract_reflection_layer, self.path_to_reflection_video)
-
-    return transmission_video, reflection_video
-
-  def __process_video_separation(video, extraction_function, path):
+  def __process_video_separation(self, video, extraction_function, path):
     separated_video = dict()
     window = list()
     ret = True
@@ -38,7 +44,7 @@ class VideoSeparation:
           window.append(frame)
 
       else:
-        return null
+        return None
 
     extraction_function(separated_frame_index, separated_video, window)
     separated_frame_index += 1
@@ -57,16 +63,16 @@ class VideoSeparation:
 
     separated_video = list(dict(sorted(separated_video.items())).values())
     separated_video = np.rot90(separated_video, k=-1, axes=(1,2))
-    if save_to_path:
-      save_video(separated_video, path)
+    if self.save_to_path:
+      self.__save_video(separated_video, path)
       
     return separated_video
 
-  def __extract_transmission_layer(frame_number, separated_video, window):
+  def __extract_transmission_layer(self, frame_number, separated_video, window):
     separated_image = np.median(window, axis=0).astype(np.uint8)
     separated_video[frame_number] = separated_image
 
-  def __extract_reflection_layer(frame_number, separated_video, window):
+  def __extract_reflection_layer(self, frame_number, separated_video, window):
     grey_window = list()
 
     for i, frame in enumerate(window):
@@ -79,7 +85,7 @@ class VideoSeparation:
     mask = np.repeat(mask, 3, axis=2)
     separated_video[frame_number] = np.where(mask, window[0], 0)
 
-  def __save_video(video, path):
+  def __save_video(self, video, path):
     h, w, _ = video[0].shape
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter(path, fourcc, self.window_size, (w, h))
