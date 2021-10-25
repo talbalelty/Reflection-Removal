@@ -6,5 +6,5 @@ setuptools.setup(
     url='https://github.com/talbalelty/Reflection-Removal',
     license='MIT',
     packages=['video_separation'],
-    install_requires=['gc', 'cv2', 'numpy'],
+    install_requires=['cv2', 'numpy'],
 )
