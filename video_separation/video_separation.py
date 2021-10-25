@@ -3,35 +3,44 @@ import cv2
 import numpy as np
 
 class VideoSeparation:
-  def __init__(self, path_video, path_transmission_video=None, path_reflection_video=None, window_size=10, min_val=2.5, save_to_path=True):
+  def __init__(self, path_video, window_size=10, min_val=2.5):
     self.window_size = window_size
     self.min_val = min_val
     self.path_to_video = path_video
-    self.path_to_transmission_video = path_transmission_video
-    self.path_to_reflection_video = path_reflection_video
-    self.save_to_path = save_to_path
+    self.transmission_video = None
+    self.reflection_video = None
     
   def get_transmission(self):
-    if self.path_to_transmission_video is not None:
-      return self.__separate_video(self.path_to_transmission_video, self.__extract_transmission_layer)
-    else:
-      return None
+    self.transmission_video = self.__separate_video(self.__extract_transmission_layer)
+    return self.transmission_video
+
 
   def get_reflection(self):
-    if self.path_to_reflection_video is not None:
-      return self.__separate_video(self.path_to_reflection_video, self.__extract_reflection_layer)
-    else:
-      return None
+    self.reflection_video = self.__separate_video(self.__extract_reflection_layer)
+    return self.reflection_video
+
+  @staticmethod
+  def save_video(self, video, path):
+    h, w, _ = video[0].shape
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter(path, fourcc, self.window_size, (w, h))
+
+    for i in range(len(video)):
+      out.write(video[i])
+
+    out.release()
+    cv2.destroyAllWindows()
+    print(path + "\nVideo made successfully")
     
-  def __separate_video(self, path_to_save, extract_layer):
+  def __separate_video(self, extract_layer):
     # transmission
     gc.collect()
     video = cv2.VideoCapture(self.path_to_video)
-    separated_video = self.__process_video_separation(video, extract_layer, path_to_save)
+    separated_video = self.__process_video_separation(video, extract_layer)
     
     return separated_video
 
-  def __process_video_separation(self, video, extraction_function, path):
+  def __process_video_separation(self, video, extraction_function):
     separated_video = dict()
     window = list()
     ret = True
@@ -63,10 +72,7 @@ class VideoSeparation:
       i += 1
 
     separated_video = list(dict(sorted(separated_video.items())).values())
-    separated_video = np.rot90(separated_video, k=-1, axes=(1,2))
-    if self.save_to_path:
-      self.__save_video(separated_video, path)
-      
+    separated_video = np.rot90(separated_video, k=-1, axes=(1,2))    
     return separated_video
 
   def __extract_transmission_layer(self, frame_number, separated_video, window):
@@ -85,15 +91,3 @@ class VideoSeparation:
     mask = mask[:, :, np.newaxis]
     mask = np.repeat(mask, 3, axis=2)
     separated_video[frame_number] = np.where(mask, window[0], 0)
-
-  def __save_video(self, video, path):
-    h, w, _ = video[0].shape
-    fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter(path, fourcc, self.window_size, (w, h))
-
-    for i in range(len(video)):
-      out.write(video[i])
-
-    out.release()
-    cv2.destroyAllWindows()
-    print(path + "\nVideo made successfully")
