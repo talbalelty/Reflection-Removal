@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name='Reflection-Removal',
+    name='video_separation',
     version='0.1',
     url='https://github.com/talbalelty/Reflection-Removal',
     license='MIT',
