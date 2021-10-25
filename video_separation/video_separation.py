@@ -9,6 +9,7 @@ class VideoSeparation:
     self.path_to_video = path_video
     self.path_to_transmission_video = path_transmission_video
     self.path_to_reflection_video = path_reflection_video
+    self.save_to_path = save_to_path
     
   def get_transmission(self):
     if self.path_to_transmission_video is not None:
