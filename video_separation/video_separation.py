@@ -29,7 +29,6 @@ class VideoSeparation:
 
     out.release()
     cv2.destroyAllWindows()
-    print(path + "\nVideo made successfully")
     
   def __separate_video(self, extract_layer):
     # transmission
