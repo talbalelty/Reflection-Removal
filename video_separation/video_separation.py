@@ -19,7 +19,6 @@ class VideoSeparation:
     self.reflection_video = self.__separate_video(self.__extract_reflection_layer)
     return self.reflection_video
 
-  @staticmethod
   def save_video(self, video, path):
     h, w, _ = video[0].shape
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
