@@ -11,7 +11,7 @@ class VideoSeparation:
         self.path_to_video = path_video
         video_path = self.path_to_video.split('.')[-1]
         self.path_to_stabilized_video = video_path + "_stabilized.avi"
-        self.stabilizeVideo(self.smooth_amount, self.path_to_video, self.path_to_stabilized_video)
+        self.stabilizeVideo()
         self.stabilized_video = cv2.VideoCapture(self.path_to_stabilized_video)
         self.path_to_transmission_video = video_path + "_transmission.avi"
         self.transmission_video = self.get_transmission()
@@ -120,11 +120,11 @@ class VideoSeparation:
         frame = cv2.warpAffine(frame, T, (s[1], s[0]))
         return frame
 
-    def stabilizeVideo(self, smooth_amount, path_to_video, path_to_stabilized_video):
+    def stabilizeVideo(self):
         # smooth_amount - The larger the more stable the video, but less reactive to sudden panning
 
         # Read input video
-        cap = cv2.VideoCapture(path_to_video)
+        cap = cv2.VideoCapture(self.path_to_video)
 
         # Get frame count
         n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -140,7 +140,7 @@ class VideoSeparation:
         fourcc = cv2.VideoWriter_fourcc(*'MJPG')
 
         # Set up output video
-        out = cv2.VideoWriter(path_to_stabilized_video, fourcc, fps, (h, w))
+        out = cv2.VideoWriter(self.path_to_stabilized_video, fourcc, fps, (h, w))
 
         # Read first frame
         _, prev = cap.read()
@@ -199,7 +199,7 @@ class VideoSeparation:
         trajectory = np.cumsum(transforms, axis=0)
 
         # Create variable to store smoothed trajectory
-        smoothed_trajectory = self.smooth(trajectory, smooth_amount)
+        smoothed_trajectory = self.smooth(trajectory, self.smooth_amount)
 
         # Calculate difference in smoothed_trajectory and trajectory
         difference = smoothed_trajectory - trajectory
