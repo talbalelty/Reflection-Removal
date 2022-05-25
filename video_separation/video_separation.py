@@ -9,7 +9,7 @@ class VideoSeparation:
         self.min_val = min_val
         self.smooth_amount = smooth_amount
         self.path_to_video = path_video
-        video_path = self.path_to_video.split('.')[-1]
+        video_path = self.path_to_video.split('.')[0]
         self.path_to_stabilized_video = video_path + "_stabilized.avi"
         self.stabilizeVideo()
         self.stabilized_video = cv2.VideoCapture(self.path_to_stabilized_video)
@@ -85,7 +85,6 @@ class VideoSeparation:
             ret, frame = video.read()
             i += 1
 
-        # origin_video = np.rot90(origin_video, k=-1, axes=(1,2))
         origin_video = np.array(origin_video)
         reflection_video = origin_video - min_layer
         self.save_video(reflection_video, fps, save_path)

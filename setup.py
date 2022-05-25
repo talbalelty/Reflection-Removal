@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name='video_separation',
-    version='1.1.2',
+    version='1.1.3',
     url='https://github.com/talbalelty/video_separation',
     license='MIT',
     packages=setuptools.find_packages(),
