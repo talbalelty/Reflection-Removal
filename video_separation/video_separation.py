@@ -12,11 +12,13 @@ class VideoSeparation:
         video_path = self.path_to_video.split('.')[0]
         self.path_to_stabilized_video = video_path + "_stabilized.avi"
         self.stabilizeVideo()
-        self.stabilized_video = cv2.VideoCapture(self.path_to_stabilized_video)
+        self.stabilized_video = open(self.path_to_stabilized_video, 'r')
         self.path_to_transmission_video = video_path + "_transmission.avi"
-        self.transmission_video = self.get_transmission()
+        self.get_transmission()
+        self.transmission_video = open(self.path_to_transmission_video, 'r')
         self.path_to_reflection_video = video_path + "_reflection.avi"
-        self.reflection_video = self.get_reflection()
+        self.get_reflection()
+        self.reflection_video = open(self.path_to_reflection_video, 'r')
 
     def get_transmission(self):
         self.minimum_layer = self.process_video_separation(cv2.VideoCapture(self.path_to_stabilized_video), self.extract_minimum_layer,
