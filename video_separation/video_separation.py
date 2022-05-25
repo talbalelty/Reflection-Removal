@@ -23,13 +23,11 @@ class VideoSeparation:
     def get_transmission(self):
         self.minimum_layer = self.process_video_separation(cv2.VideoCapture(self.path_to_stabilized_video), self.extract_minimum_layer,
                                                            self.path_to_transmission_video)
-        self.transmission_video = cv2.VideoCapture(self.path_to_transmission_video)
-        return self.transmission_video
+        return cv2.VideoCapture(self.path_to_transmission_video)
 
     def get_reflection(self):
         self.maximum_layer = self.extract_maximum_layer(cv2.VideoCapture(self.path_to_stabilized_video), self.minimum_layer,self.path_to_reflection_video)
-        self.reflection_video = cv2.VideoCapture(self.path_to_reflection_video)
-        return self.reflection_video
+        return cv2.VideoCapture(self.path_to_reflection_video)
 
     def save_video(self, video, fps, path):
         h, w, _ = video[0].shape
