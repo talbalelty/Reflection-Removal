@@ -120,7 +120,7 @@ class VideoSeparation:
         frame = cv2.warpAffine(frame, T, (s[1], s[0]))
         return frame
 
-    def stabilizeVideo(self, mooth_amount, path_to_video, path_to_stabilized_video):
+    def stabilizeVideo(self, smooth_amount, path_to_video, path_to_stabilized_video):
         # smooth_amount - The larger the more stable the video, but less reactive to sudden panning
 
         # Read input video
