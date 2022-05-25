@@ -25,8 +25,7 @@ class VideoSeparation:
         return self.transmission_video
 
     def get_reflection(self):
-        self.maximum_layer = self.extract_maximum_layer(self.stabilized_video, self.minimum_layer,
-                                                        self.path_to_reflection_video)
+        self.maximum_layer = self.extract_maximum_layer(self.stabilized_video, self.minimum_layer,self.path_to_reflection_video)
         self.reflection_video = cv2.VideoCapture(self.path_to_reflection_video)
         return self.reflection_video
 
@@ -76,7 +75,7 @@ class VideoSeparation:
         separated_image = np.min(window, axis=0).astype(np.uint8)
         separated_video[frame_number] = separated_image
 
-    def extract_maximum_layer(video, min_layer, save_path):
+    def extract_maximum_layer(self, video, min_layer, save_path):
         fps = round(video.get(cv2.CAP_PROP_FPS))
         origin_video = list()
         ret, frame = video.read()
